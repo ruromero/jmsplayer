@@ -1,4 +1,4 @@
-package com.guadalcode.tools.model.jms;
+package com.guadalcode.tools.jmsplayer.model;
 
 public class DestinationConfig {
 

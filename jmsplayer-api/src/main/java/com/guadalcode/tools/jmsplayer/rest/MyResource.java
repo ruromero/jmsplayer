@@ -1,4 +1,4 @@
-package com.guadalcode.tools.rest.jms;
+package com.guadalcode.tools.jmsplayer.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

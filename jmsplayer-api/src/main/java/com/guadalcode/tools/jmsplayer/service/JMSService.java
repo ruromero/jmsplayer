@@ -1,13 +1,13 @@
-package com.guadalcode.tools.service.jms;
+package com.guadalcode.tools.jmsplayer.service;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.guadalcode.tools.model.jms.DestinationConfig;
-import com.guadalcode.tools.model.jms.JMSProviderType;
-import com.guadalcode.tools.model.jms.MessageContent;
-import com.guadalcode.tools.service.jms.impl.WeblogicJMSSenderService;
+import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
+import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
+import com.guadalcode.tools.jmsplayer.model.MessageContent;
+import com.guadalcode.tools.jmsplayer.service.impl.WeblogicJMSSenderService;
 
 public class JMSService {
 
