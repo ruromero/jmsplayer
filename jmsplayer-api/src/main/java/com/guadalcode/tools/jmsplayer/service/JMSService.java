@@ -7,6 +7,7 @@ import java.util.Map;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
+import com.guadalcode.tools.jmsplayer.service.impl.ActiveMQJMSSenderService;
 import com.guadalcode.tools.jmsplayer.service.impl.WeblogicJMSSenderService;
 
 public class JMSService {
@@ -17,6 +18,7 @@ public class JMSService {
     
     public JMSService() {
 	senderServices.put(JMSProviderType.WEBLOGIC, new WeblogicJMSSenderService());
+	senderServices.put(JMSProviderType.ACTIVEMQ, new ActiveMQJMSSenderService());
     }
     
     public Collection<DestinationConfig> getDestinations() {

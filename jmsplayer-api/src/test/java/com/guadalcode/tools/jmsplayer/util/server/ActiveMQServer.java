@@ -4,14 +4,19 @@ import org.apache.activemq.broker.BrokerService;
 
 public class ActiveMQServer {
 
-    private BrokerService brokerService = new BrokerService();
+    private BrokerService service = new BrokerService();
     
     public void start() throws Exception {
-	brokerService.setPersistent(false);
-	brokerService.start();
+	service.setPersistent(false);
+	service.addConnector("tcp://localhost:61616");
+	service.start();
     }
     
     public void stop() throws Exception {
-	brokerService.stop();
+	service.stop();
+    }
+    
+    public BrokerService getService() {
+	return service;
     }
 }
