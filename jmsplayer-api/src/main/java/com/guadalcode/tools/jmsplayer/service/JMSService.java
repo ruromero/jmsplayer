@@ -7,18 +7,18 @@ import java.util.Map;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
-import com.guadalcode.tools.jmsplayer.service.impl.ActiveMQJMSSenderService;
-import com.guadalcode.tools.jmsplayer.service.impl.WeblogicJMSSenderService;
+import com.guadalcode.tools.jmsplayer.service.impl.EmbeddedActiveMQJMSProducer;
+import com.guadalcode.tools.jmsplayer.service.impl.WeblogicJMSProducer;
 
 public class JMSService {
 
     private Map<String, DestinationConfig> destinations = new HashMap<>();
     
-    private Map<JMSProviderType, JMSSenderService> senderServices = new HashMap<>();
+    private Map<JMSProviderType, JMSProducer> producers = new HashMap<>();
     
     public JMSService() {
-	senderServices.put(JMSProviderType.WEBLOGIC, new WeblogicJMSSenderService());
-	senderServices.put(JMSProviderType.ACTIVEMQ, new ActiveMQJMSSenderService());
+	producers.put(JMSProviderType.WEBLOGIC, new WeblogicJMSProducer());
+	producers.put(JMSProviderType.EMBEDDED_ACTIVEMQ, new EmbeddedActiveMQJMSProducer());
     }
     
     public Collection<DestinationConfig> getDestinations() {
@@ -49,7 +49,7 @@ public class JMSService {
 	if(destination == null) {
 	    throw new IllegalArgumentException("The requested destination does not exist");
 	}
-	JMSSenderService sender = senderServices.get(destination.getProviderType());
+	JMSProducer sender = producers.get(destination.getProviderType());
 	if(sender == null) {
 	    throw new UnsupportedOperationException("Unable to find a JMS Sender of type: " + destination.getProviderType());
 	}

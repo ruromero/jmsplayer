@@ -19,12 +19,12 @@ import org.apache.logging.log4j.util.Strings;
 
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
-import com.guadalcode.tools.jmsplayer.service.JMSSenderService;
+import com.guadalcode.tools.jmsplayer.service.JMSProducer;
 
-public class WeblogicJMSSenderService implements JMSSenderService {
+public class WeblogicJMSProducer implements JMSProducer {
 
     public static final String WL_INITIAL_CONTEXT_FACTORY = "weblogic.jndi.WLInitialContextFactory";
-    private static final Logger logger = LogManager.getLogger(WeblogicJMSSenderService.class);
+    private static final Logger logger = LogManager.getLogger(WeblogicJMSProducer.class);
     
     @Override
     public void send(DestinationConfig destinationCfg, MessageContent message) {

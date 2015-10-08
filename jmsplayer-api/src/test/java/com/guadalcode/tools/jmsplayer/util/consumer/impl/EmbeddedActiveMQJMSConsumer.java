@@ -23,12 +23,12 @@ import org.apache.logging.log4j.Logger;
 
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
-import com.guadalcode.tools.jmsplayer.service.impl.WeblogicJMSProducer;
+import com.guadalcode.tools.jmsplayer.service.impl.EmbeddedActiveMQJMSProducer;
 import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumer;
 
-public class WeblogicJMSConsumer implements JMSConsumer {
+public class EmbeddedActiveMQJMSConsumer implements JMSConsumer {
 
-    private static final Logger logger = LogManager.getLogger(WeblogicJMSConsumer.class);
+    private static final Logger logger = LogManager.getLogger(EmbeddedActiveMQJMSConsumer.class);
     private static final long MAX_WAIT = 1000L;
 
     private List<MessageContent> messages = new ArrayList<>();
@@ -37,7 +37,7 @@ public class WeblogicJMSConsumer implements JMSConsumer {
 
     private boolean active = false;
 
-    public WeblogicJMSConsumer(DestinationConfig config) {
+    public EmbeddedActiveMQJMSConsumer(DestinationConfig config) {
 	this.config = config;
     }
 
@@ -48,10 +48,10 @@ public class WeblogicJMSConsumer implements JMSConsumer {
 	    public synchronized void run() {
 		InitialContext ctx = null;
 		Hashtable<String, String> properties = new Hashtable<>();
-		properties.put(Context.INITIAL_CONTEXT_FACTORY, WeblogicJMSProducer.WL_INITIAL_CONTEXT_FACTORY);
+		properties.put(Context.INITIAL_CONTEXT_FACTORY, EmbeddedActiveMQJMSProducer.ACTIVEMQ_INITIAL_CONTEXT_FACTORY);
 		properties.put(Context.PROVIDER_URL, config.getEndpoint());
-		properties.put(Context.SECURITY_PRINCIPAL, config.getUsername());
-		properties.put(Context.SECURITY_CREDENTIALS, config.getPassword());
+//		properties.put(Context.SECURITY_PRINCIPAL, config.getUsername());
+//		properties.put(Context.SECURITY_CREDENTIALS, config.getPassword());
 		try {
 		    ctx = new InitialContext(properties);
 		    logger.debug("Created initial context for destination: {}", config.getName());
@@ -63,8 +63,7 @@ public class WeblogicJMSConsumer implements JMSConsumer {
 		    Session session = null;
 		    MessageConsumer consumer = null;
 		    try {
-			ConnectionFactory connectionFactory = (ConnectionFactory) ctx.lookup(config
-				.getConnectionFactory());
+			ConnectionFactory connectionFactory = (ConnectionFactory)ctx.lookup(config.getConnectionFactory());
 			conn = connectionFactory.createConnection();
 			conn.start();
 			session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -73,18 +72,23 @@ public class WeblogicJMSConsumer implements JMSConsumer {
 			active = true;
 			logger.debug("Consumer listening to incoming messages");
 			while (active) {
-			    Message message = consumer.receive();
-			    if (message != null && message instanceof TextMessage) {
-				String text = ((TextMessage) message).getText();
-				MessageContent content = new MessageContent(text, message.getJMSType());
-				messages.add(content);
-				logger.debug("Message consumed: {}", content);
-			    } else {
-				if(message != null) {
-				    logger.warn("Received incorrect type of message");
+			    try {
+				Message message = consumer.receive(MAX_WAIT);
+				if (message != null && message instanceof TextMessage) {
+				    String text = ((TextMessage) message).getText();
+				    MessageContent content = new MessageContent(text, message.getJMSType());
+				    messages.add(content);
+				    logger.debug("Message consumed: {}", content);
+				} else {
+				    if (message != null) {
+					logger.warn("Received incorrect type of message");
+				    }
+				    logger.debug("Max wait {} ms reached but no text message found", MAX_WAIT);
 				}
-				logger.debug("Max wait {} ms reached but no text message found", MAX_WAIT);
+			    } catch (JMSException e) {
+				logger.warn("Error receiving message", e);
 			    }
+			    
 			}
 
 		    } catch (NamingException | JMSException e) {
@@ -116,7 +120,7 @@ public class WeblogicJMSConsumer implements JMSConsumer {
     public void stop() throws Exception {
 	active = false;
 	logger.debug("Stopping message consumer");
-	Thread.sleep(MAX_WAIT);
+	Thread.sleep(100 + MAX_WAIT);
     }
 
     @Override

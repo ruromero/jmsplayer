@@ -1,6 +1,7 @@
 package com.guadalcode.tools.jmsplayer.util.consumer;
 
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
+import com.guadalcode.tools.jmsplayer.util.consumer.impl.EmbeddedActiveMQJMSConsumer;
 import com.guadalcode.tools.jmsplayer.util.consumer.impl.WeblogicJMSConsumer;
 
 public class JMSConsumerFactory {
@@ -12,6 +13,8 @@ public class JMSConsumerFactory {
 	switch (config.getProviderType()) {
 	case WEBLOGIC:
 	    return new WeblogicJMSConsumer(config);
+	case EMBEDDED_ACTIVEMQ:
+	    return new EmbeddedActiveMQJMSConsumer(config);
 	default:
 	    throw new IllegalArgumentException("Unable to find a suitable Consumer instance");
 	}

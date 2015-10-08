@@ -14,7 +14,7 @@ import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumer;
 import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerFactory;
 import com.guadalcode.tools.jmsplayer.util.server.ActiveMQServer;
 
-public class ActiveMQJMSSenderServiceIntegration {
+public class EmbeddedActiveMQJMSProducerIntegration {
 
     private static DestinationConfig config;
     private static JMSService service = new JMSService();
@@ -26,9 +26,10 @@ public class ActiveMQJMSSenderServiceIntegration {
 	server.start();
 	
 	config = new DestinationConfig("Default ActiveMQ Queue");
-	config.setEndpoint("vm://localhost");
-	config.setProviderType(JMSProviderType.ACTIVEMQ);
-	config.setDestinationName("jms/myqueue");
+	config.setConnectionFactory("ConnectionFactory");
+	config.setEndpoint("tcp://localhost:61616");
+	config.setProviderType(JMSProviderType.EMBEDDED_ACTIVEMQ);
+	config.setDestinationName("dynamicQueues/FOO.BAR");
 	
 	service.addDestination(config);
 	
