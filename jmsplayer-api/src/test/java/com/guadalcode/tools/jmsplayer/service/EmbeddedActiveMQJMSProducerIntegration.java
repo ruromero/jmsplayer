@@ -17,7 +17,7 @@ import com.guadalcode.tools.jmsplayer.util.server.ActiveMQServer;
 public class EmbeddedActiveMQJMSProducerIntegration {
 
     private static DestinationConfig config;
-    private static JMSService service = new JMSService();
+    private static JMSService service = JMSService.getInstance();
     private static JMSConsumer consumer;
     private static ActiveMQServer server = new ActiveMQServer();
     

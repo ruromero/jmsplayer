@@ -1,22 +1,32 @@
 package com.guadalcode.tools.jmsplayer.service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.base.Strings;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
 import com.guadalcode.tools.jmsplayer.service.impl.EmbeddedActiveMQJMSProducer;
 import com.guadalcode.tools.jmsplayer.service.impl.WeblogicJMSProducer;
 
+/**
+ * TODO: Use any IoC mecanism to instantiate this and take care of all the concurrency threats
+ * 
+ * @author rromero
+ *
+ */
 public class JMSService {
 
-    private Map<String, DestinationConfig> destinations = new HashMap<>();
+    private Map<String, DestinationConfig> destinations = Collections.synchronizedMap(new HashMap<String, DestinationConfig>());
     
-    private Map<JMSProviderType, JMSProducer> producers = new HashMap<>();
+    private Map<JMSProviderType, JMSProducer> producers = Collections.synchronizedMap(new HashMap<JMSProviderType, JMSProducer>());
     
-    public JMSService() {
+    private static JMSService INSTANCE = new JMSService();
+    
+    private JMSService() {
 	producers.put(JMSProviderType.WEBLOGIC, new WeblogicJMSProducer());
 	producers.put(JMSProviderType.EMBEDDED_ACTIVEMQ, new EmbeddedActiveMQJMSProducer());
     }
@@ -54,6 +64,26 @@ public class JMSService {
 	    throw new UnsupportedOperationException("Unable to find a JMS Sender of type: " + destination.getProviderType());
 	}
 	sender.send(destination, message);
+    }
+
+    public DestinationConfig getDestination(String name) {
+	if(Strings.isNullOrEmpty(name)) {
+	    throw new IllegalArgumentException("The name must not be null or empty");
+	}
+	return destinations.get(name);
+    }
+
+    public void updateDestination(String name, DestinationConfig config) {
+	if(Strings.isNullOrEmpty(name)) {
+	    throw new IllegalArgumentException("The name must not be null or empty");
+	}
+	if(destinations.containsKey(name)) {
+	    destinations.put(name, config);
+	}
+    }
+    
+    public static JMSService getInstance() {
+	return INSTANCE;
     }
     
 }
