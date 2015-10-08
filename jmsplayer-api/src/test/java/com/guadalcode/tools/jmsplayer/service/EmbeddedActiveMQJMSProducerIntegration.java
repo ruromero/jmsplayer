@@ -20,74 +20,74 @@ public class EmbeddedActiveMQJMSProducerIntegration {
     private static JMSService service = JMSService.getInstance();
     private static JMSConsumer consumer;
     private static ActiveMQServer server = new ActiveMQServer();
-    
+
     @BeforeClass
     public static void setUp() throws Exception {
-	server.start();
-	
-	config = new DestinationConfig();
-	config.setName("Default ActiveMQ Queue");
-	config.setConnectionFactory("ConnectionFactory");
-	config.setEndpoint("tcp://localhost:61616");
-	config.setProviderType(JMSProviderType.EMBEDDED_ACTIVEMQ);
-	config.setDestinationName("dynamicQueues/FOO.BAR");
-	
-	service.addDestination(config);
-	
-	consumer = JMSConsumerFactory.build(config);
-	consumer.start();
-	
+        server.start();
+
+        config = new DestinationConfig();
+        config.setName("Default ActiveMQ Queue");
+        config.setConnectionFactory("ConnectionFactory");
+        config.setEndpoint("tcp://localhost:61616");
+        config.setProviderType(JMSProviderType.EMBEDDED_ACTIVEMQ);
+        config.setDestinationName("dynamicQueues/FOO.BAR");
+
+        service.addDestination(config);
+
+        consumer = JMSConsumerFactory.build(config);
+        consumer.start();
+
     }
-    
+
     @AfterClass
     public static void tearDown() throws Exception {
-	consumer.stop();
-	
-	server.stop();
+        consumer.stop();
+
+        server.stop();
     }
-    
+
     @After
     public void clean() {
-	consumer.clear();
+        consumer.clear();
     }
-    
+
     @Test
     public void testBasicSend() throws Exception {
-	MessageContent message = new MessageContent("Hello world");
+        MessageContent message = new MessageContent("Hello world");
 
-	service.sendMessage(config.getName(), message);
-	
-	Thread.sleep(1000);
-	
-	assertEquals(1, consumer.getMessages().size());
-	consumer.assertReceived(message);
+        service.sendMessage(config.getName(), message);
+
+        Thread.sleep(1000);
+
+        assertEquals(1, consumer.getMessages().size());
+        consumer.assertReceived(message);
     }
-    
+
     @Test
     public void testBasicSendWithType() throws Exception {
-	MessageContent message = new MessageContent("Hello world", "My JMS Type");
-	
-	service.sendMessage(config.getName(), message);
-	
-	Thread.sleep(1000);
-	
-	assertEquals(1, consumer.getMessages().size());
-	consumer.assertReceived(message);
+        MessageContent message = new MessageContent("Hello world", "My JMS Type");
+
+        service.sendMessage(config.getName(), message);
+
+        Thread.sleep(1000);
+
+        assertEquals(1, consumer.getMessages().size());
+        consumer.assertReceived(message);
     }
-    
+
     @Test
     public void testMultipleSend() throws Exception {
-	MessageContent message = new MessageContent("Hello world", "My JMS Type");
-	
-	service.sendMessage(config.getName(), message);
-	service.sendMessage(config.getName(), message);
-	service.sendMessage(config.getName(), message);
-	service.sendMessage(config.getName(), message);
-	service.sendMessage(config.getName(), message);
-	
-	Thread.sleep(1000);
-	
-	assertEquals(5, consumer.getMessages().size());
-	consumer.assertReceived(message);
+        MessageContent message = new MessageContent("Hello world", "My JMS Type");
+
+        service.sendMessage(config.getName(), message);
+        service.sendMessage(config.getName(), message);
+        service.sendMessage(config.getName(), message);
+        service.sendMessage(config.getName(), message);
+        service.sendMessage(config.getName(), message);
+
+        Thread.sleep(1000);
+
+        assertEquals(5, consumer.getMessages().size());
+        consumer.assertReceived(message);
     }
 }

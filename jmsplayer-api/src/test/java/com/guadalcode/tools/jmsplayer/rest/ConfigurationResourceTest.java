@@ -24,39 +24,40 @@ import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 
 public class ConfigurationResourceTest extends JerseyTest {
 
-    private static final GenericType<List<DestinationConfig>> GENERIC_TYPE = new GenericType<List<DestinationConfig>>() {}; 
-    
+    private static final GenericType<List<DestinationConfig>> GENERIC_TYPE = new GenericType<List<DestinationConfig>>() {
+    };
+
     @Override
     protected Application configure() {
-	set(TestProperties.LOG_TRAFFIC, true);
+        set(TestProperties.LOG_TRAFFIC, true);
         set(TestProperties.DUMP_ENTITY, true);
         return new ResourceConfig(ConfigurationResource.class);
     }
-    
+
     @Test
     public void testList() {
-	List<DestinationConfig> configs = target("configuration").request(MediaType.APPLICATION_JSON).get(GENERIC_TYPE);
-	assertTrue(configs.isEmpty());
+        List<DestinationConfig> configs = target("configuration").request(MediaType.APPLICATION_JSON).get(GENERIC_TYPE);
+        assertTrue(configs.isEmpty());
     }
-    
+
     @Test
     public void testCreateAndList() throws JsonParseException, JsonMappingException, IOException {
-	DestinationConfig config = new DestinationConfig();
-	config.setName("test");
-	config.setConnectionFactory("ConnFactory");
-	config.setEndpoint("Endpoint");
-	config.setUsername("Username");
-	config.setPassword("Password");
-	config.setDestinationName("Destination name");
-	config.setProviderType(JMSProviderType.WEBLOGIC);
-	Entity<DestinationConfig> configEntity = Entity.json(config);
-	
-	target("configuration").request().put(configEntity, DestinationConfig.class);
-	
-	List<DestinationConfig> configs = target("configuration").request(MediaType.APPLICATION_JSON).get(GENERIC_TYPE);
-	assertFalse(configs.isEmpty());
-	assertEquals(1, configs.size());
-	DestinationConfig resultConfig = configs.get(0);
-	assertEquals(config.getDestinationName(), resultConfig.getDestinationName());
+        DestinationConfig config = new DestinationConfig();
+        config.setName("test");
+        config.setConnectionFactory("ConnFactory");
+        config.setEndpoint("Endpoint");
+        config.setUsername("Username");
+        config.setPassword("Password");
+        config.setDestinationName("Destination name");
+        config.setProviderType(JMSProviderType.WEBLOGIC);
+        Entity<DestinationConfig> configEntity = Entity.json(config);
+
+        target("configuration").request().put(configEntity, DestinationConfig.class);
+
+        List<DestinationConfig> configs = target("configuration").request(MediaType.APPLICATION_JSON).get(GENERIC_TYPE);
+        assertFalse(configs.isEmpty());
+        assertEquals(1, configs.size());
+        DestinationConfig resultConfig = configs.get(0);
+        assertEquals(config.getDestinationName(), resultConfig.getDestinationName());
     }
 }

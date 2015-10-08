@@ -25,56 +25,57 @@ public class WeblogicJMSProducer implements JMSProducer {
 
     public static final String WL_INITIAL_CONTEXT_FACTORY = "weblogic.jndi.WLInitialContextFactory";
     private static final Logger logger = LogManager.getLogger(WeblogicJMSProducer.class);
-    
+
     @Override
     public void send(DestinationConfig destinationCfg, MessageContent message) {
-	InitialContext ctx = null;
-	Hashtable<String, String> properties = new Hashtable<>();
-	properties.put(Context.INITIAL_CONTEXT_FACTORY, WL_INITIAL_CONTEXT_FACTORY);
-	properties.put(Context.PROVIDER_URL, destinationCfg.getEndpoint());
-	properties.put(Context.SECURITY_PRINCIPAL, destinationCfg.getUsername());
-	properties.put(Context.SECURITY_CREDENTIALS, destinationCfg.getPassword());
-	try {
-	    ctx = new InitialContext(properties);
-	    logger.debug("Created initial context for destination: {}", destinationCfg.getName());
-	} catch (NamingException e) {
-	    logger.error("Unable to create the initial context", e);
-	}
-	if(ctx != null) {
-	    Connection conn = null;
-	    Session session = null;
-	    MessageProducer producer = null;
-	    try {
-		ConnectionFactory connectionFactory = (ConnectionFactory)ctx.lookup(destinationCfg.getConnectionFactory());
-		conn = connectionFactory.createConnection();
-		session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		Destination destination = (Destination)ctx.lookup(destinationCfg.getDestinationName());
-		producer = session.createProducer(destination);
-		TextMessage msg = session.createTextMessage(message.getText());
-		if(!Strings.isBlank(message.getType())) {
-		    msg.setJMSType(message.getType());
-		}
-		logger.debug("Message configured and ready to be sent");
-		producer.send(msg);
-		logger.debug("Message successfully sent");
-	    } catch (NamingException | JMSException e) {
-		logger.error("Unable to create the JMS Connection to " + destinationCfg.getConnectionFactory() + " - " + destinationCfg.getDestinationName(), e);
-	    } finally {
-		try {
-		    if(producer != null) {
-			producer.close();
-		    }
-		    if(session != null) {
-			session.close();
-		    }
-		    if(conn != null) {
-			conn.close();
-		    }
-		} catch (JMSException e1) {
-		    logger.error("Unable to close the resources", e1);
-		}
-	    }
-	}
+        InitialContext ctx = null;
+        Hashtable<String, String> properties = new Hashtable<>();
+        properties.put(Context.INITIAL_CONTEXT_FACTORY, WL_INITIAL_CONTEXT_FACTORY);
+        properties.put(Context.PROVIDER_URL, destinationCfg.getEndpoint());
+        properties.put(Context.SECURITY_PRINCIPAL, destinationCfg.getUsername());
+        properties.put(Context.SECURITY_CREDENTIALS, destinationCfg.getPassword());
+        try {
+            ctx = new InitialContext(properties);
+            logger.debug("Created initial context for destination: {}", destinationCfg.getName());
+        } catch (NamingException e) {
+            logger.error("Unable to create the initial context", e);
+        }
+        if (ctx != null) {
+            Connection conn = null;
+            Session session = null;
+            MessageProducer producer = null;
+            try {
+                ConnectionFactory connectionFactory = (ConnectionFactory) ctx.lookup(destinationCfg.getConnectionFactory());
+                conn = connectionFactory.createConnection();
+                session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                Destination destination = (Destination) ctx.lookup(destinationCfg.getDestinationName());
+                producer = session.createProducer(destination);
+                TextMessage msg = session.createTextMessage(message.getText());
+                if (!Strings.isBlank(message.getType())) {
+                    msg.setJMSType(message.getType());
+                }
+                logger.debug("Message configured and ready to be sent");
+                producer.send(msg);
+                logger.debug("Message successfully sent");
+            } catch (NamingException | JMSException e) {
+                logger.error("Unable to create the JMS Connection to " + destinationCfg.getConnectionFactory() + " - "
+                        + destinationCfg.getDestinationName(), e);
+            } finally {
+                try {
+                    if (producer != null) {
+                        producer.close();
+                    }
+                    if (session != null) {
+                        session.close();
+                    }
+                    if (conn != null) {
+                        conn.close();
+                    }
+                } catch (JMSException e1) {
+                    logger.error("Unable to close the resources", e1);
+                }
+            }
+        }
 
     }
 

@@ -6,5 +6,5 @@ import com.guadalcode.tools.jmsplayer.model.MessageContent;
 public interface JMSProducer {
 
     void send(DestinationConfig destination, MessageContent message);
-    
+
 }
