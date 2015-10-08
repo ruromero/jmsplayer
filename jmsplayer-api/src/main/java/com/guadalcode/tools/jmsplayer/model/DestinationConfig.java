@@ -2,7 +2,7 @@ package com.guadalcode.tools.jmsplayer.model;
 
 public class DestinationConfig {
 
-    private final String name;
+    private String name;
     private String endpoint;
     private String connectionFactory;
     private String destinationName;
@@ -10,14 +10,14 @@ public class DestinationConfig {
     private String password;
     private JMSProviderType providerType;
 
-    public DestinationConfig(String name) {
-	this.name = name;
-    }
-    
     public String getName() {
 	return name;
     }
 
+    public void setName(String name) {
+	this.name = name;
+    }
+    
     public String getEndpoint() {
 	return endpoint;
     }

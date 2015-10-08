@@ -25,7 +25,8 @@ public class EmbeddedActiveMQJMSProducerIntegration {
     public static void setUp() throws Exception {
 	server.start();
 	
-	config = new DestinationConfig("Default ActiveMQ Queue");
+	config = new DestinationConfig();
+	config.setName("Default ActiveMQ Queue");
 	config.setConnectionFactory("ConnectionFactory");
 	config.setEndpoint("tcp://localhost:61616");
 	config.setProviderType(JMSProviderType.EMBEDDED_ACTIVEMQ);

@@ -66,8 +66,8 @@ public class ConfigurationResource {
     
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void create(@PathParam("name")String name, DestinationConfig config) {
-	logger.debug("Creating destination {}", name);
+    public void create(DestinationConfig config) {
+	logger.debug("Creating destination {}", config.getName());
 	JMS_SERVICE.addDestination(config);
     }
 }

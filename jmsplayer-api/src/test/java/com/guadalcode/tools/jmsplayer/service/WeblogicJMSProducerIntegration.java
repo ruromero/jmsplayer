@@ -21,7 +21,8 @@ public class WeblogicJMSProducerIntegration {
     
     @BeforeClass
     public static void setUp() {
-	config = new DestinationConfig("Default WL Queue");
+	config = new DestinationConfig();
+	config.setName("Default WL Queue");
 	config.setEndpoint("t3://localhost:7001");
 	config.setProviderType(JMSProviderType.WEBLOGIC);
 	config.setUsername("weblogic");
