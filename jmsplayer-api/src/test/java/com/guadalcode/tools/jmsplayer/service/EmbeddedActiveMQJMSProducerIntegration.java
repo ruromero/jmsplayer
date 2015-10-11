@@ -11,7 +11,7 @@ import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
 import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumer;
-import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerFactory;
+import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerImpl;
 import com.guadalcode.tools.jmsplayer.util.server.ActiveMQServer;
 
 public class EmbeddedActiveMQJMSProducerIntegration {
@@ -34,7 +34,7 @@ public class EmbeddedActiveMQJMSProducerIntegration {
 
         service.addDestination(config);
 
-        consumer = JMSConsumerFactory.build(config);
+        consumer = new JMSConsumerImpl(config);
         consumer.start();
 
     }

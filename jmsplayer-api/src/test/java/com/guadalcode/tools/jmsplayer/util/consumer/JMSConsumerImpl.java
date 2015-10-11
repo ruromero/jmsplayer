@@ -1,4 +1,4 @@
-package com.guadalcode.tools.jmsplayer.util.consumer.impl;
+package com.guadalcode.tools.jmsplayer.util.consumer;
 
 import static org.junit.Assert.fail;
 
@@ -22,13 +22,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
+import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
-import com.guadalcode.tools.jmsplayer.service.impl.EmbeddedActiveMQJMSProducer;
-import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumer;
 
-public class EmbeddedActiveMQJMSConsumer implements JMSConsumer {
+public class JMSConsumerImpl implements JMSConsumer {
 
-    private static final Logger logger = LogManager.getLogger(EmbeddedActiveMQJMSConsumer.class);
+    private static final Logger logger = LogManager.getLogger(JMSConsumerImpl.class);
     private static final long MAX_WAIT = 1000L;
 
     private List<MessageContent> messages = new ArrayList<>();
@@ -37,7 +36,7 @@ public class EmbeddedActiveMQJMSConsumer implements JMSConsumer {
 
     private boolean active = false;
 
-    public EmbeddedActiveMQJMSConsumer(DestinationConfig config) {
+    public JMSConsumerImpl(DestinationConfig config) {
         this.config = config;
     }
 
@@ -48,7 +47,7 @@ public class EmbeddedActiveMQJMSConsumer implements JMSConsumer {
             public synchronized void run() {
                 InitialContext ctx = null;
                 Hashtable<String, String> properties = new Hashtable<>();
-                properties.put(Context.INITIAL_CONTEXT_FACTORY, EmbeddedActiveMQJMSProducer.ACTIVEMQ_INITIAL_CONTEXT_FACTORY);
+                properties.put(Context.INITIAL_CONTEXT_FACTORY, JMSProviderType.EMBEDDED_ACTIVEMQ.getInitialContextFactory());
                 properties.put(Context.PROVIDER_URL, config.getEndpoint());
                 try {
                     ctx = new InitialContext(properties);

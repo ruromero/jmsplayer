@@ -11,7 +11,7 @@ import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
 import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumer;
-import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerFactory;
+import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerImpl;
 
 public class WeblogicJMSProducerIntegration {
 
@@ -32,7 +32,7 @@ public class WeblogicJMSProducerIntegration {
 
         service.addDestination(config);
 
-        consumer = JMSConsumerFactory.build(config);
+        consumer = new JMSConsumerImpl(config);
         consumer.start();
 
     }

@@ -9,13 +9,8 @@ import com.google.common.base.Strings;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
-import com.guadalcode.tools.jmsplayer.service.impl.EmbeddedActiveMQJMSProducer;
-import com.guadalcode.tools.jmsplayer.service.impl.WeblogicJMSProducer;
 
 /**
- * TODO: Use any IoC mecanism to instantiate this and take care of all the
- * concurrency threats
- * 
  * @author rromero
  *
  */
@@ -28,8 +23,6 @@ public class JMSService {
     private static JMSService INSTANCE = new JMSService();
 
     private JMSService() {
-        producers.put(JMSProviderType.WEBLOGIC, new WeblogicJMSProducer());
-        producers.put(JMSProviderType.EMBEDDED_ACTIVEMQ, new EmbeddedActiveMQJMSProducer());
     }
 
     public Collection<DestinationConfig> getDestinations() {
