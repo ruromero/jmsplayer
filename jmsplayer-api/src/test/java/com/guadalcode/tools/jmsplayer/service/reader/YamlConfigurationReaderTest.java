@@ -11,8 +11,13 @@ import org.junit.Test;
 
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
-import com.guadalcode.tools.jmsplayer.service.reader.impl.YamlConfigurationReader;
+import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationReader;
+import com.guadalcode.tools.jmsplayer.service.configuration.impl.YamlConfigurationReader;
 
+/**
+ * @author rromero
+ *
+ */
 public class YamlConfigurationReaderTest {
 
     @Test

@@ -19,6 +19,10 @@ import org.apache.logging.log4j.Logger;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.service.JMSService;
 
+/**
+ * @author rromero
+ *
+ */
 @Path("configuration")
 public class ConfigurationResource {
 

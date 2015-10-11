@@ -4,6 +4,10 @@ import java.util.List;
 
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
 
+/**
+ * @author rromero
+ *
+ */
 public interface JMSConsumer {
 
     void start();

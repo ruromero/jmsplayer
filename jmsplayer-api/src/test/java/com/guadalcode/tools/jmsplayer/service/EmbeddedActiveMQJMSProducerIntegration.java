@@ -14,6 +14,10 @@ import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumer;
 import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerImpl;
 import com.guadalcode.tools.jmsplayer.util.server.ActiveMQServer;
 
+/**
+ * @author rromero
+ *
+ */
 public class EmbeddedActiveMQJMSProducerIntegration {
 
     private static DestinationConfig config;

@@ -21,6 +21,10 @@ import org.apache.logging.log4j.util.Strings;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
 
+/**
+ * @author rromero
+ *
+ */
 public class JMSProducerImpl implements JMSProducer {
 
     private static final Logger logger = LogManager.getLogger(JMSProducerImpl.class);

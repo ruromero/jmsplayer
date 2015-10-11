@@ -7,7 +7,6 @@ import java.util.Map;
 
 import com.google.common.base.Strings;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
-import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
 
 /**

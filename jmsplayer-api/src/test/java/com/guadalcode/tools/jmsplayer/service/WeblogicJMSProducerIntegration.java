@@ -13,6 +13,10 @@ import com.guadalcode.tools.jmsplayer.model.MessageContent;
 import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumer;
 import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerImpl;
 
+/**
+ * @author rromero
+ *
+ */
 public class WeblogicJMSProducerIntegration {
 
     private static JMSService service = JMSService.getInstance();

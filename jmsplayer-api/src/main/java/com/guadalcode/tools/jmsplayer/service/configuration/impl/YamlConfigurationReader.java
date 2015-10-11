@@ -1,5 +1,6 @@
-package com.guadalcode.tools.jmsplayer.service.reader.impl;
+package com.guadalcode.tools.jmsplayer.service.configuration.impl;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,26 +11,50 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
-import com.guadalcode.tools.jmsplayer.service.reader.ConfigurationReader;
+import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationReader;
 
+/**
+ * @author rromero
+ *
+ */
 public class YamlConfigurationReader implements ConfigurationReader {
 
     private static final Logger logger = LogManager.getLogger(YamlConfigurationReader.class);
 
     @Override
-    public List<DestinationConfig> load(String path) {
+    public List<DestinationConfig> loadFrom(String path) {
+        List<?> objects = (List<?>) new Yaml().load(ClassLoader.getSystemResourceAsStream(path));
+        return load(objects);
+    }
+    
+    @Override
+    public List<DestinationConfig> load(String content) {
+        List<?> objects = (List<?>) new Yaml().load(content);
+        return load(objects);
+    }
+    
+    @Override
+    public List<DestinationConfig> load(InputStream content) {
+        List<?> objects = (List<?>) new Yaml().load(content);
+        return load(objects);
+    }
+    
+    private List<DestinationConfig> load(List<?> objects) {
         List<DestinationConfig> configs = new ArrayList<>();
-        Yaml yaml = new Yaml();
-        List<?> objects = (List<?>) yaml.load(ClassLoader.getSystemResourceAsStream(path));
         for(Object object : objects) {
-            DestinationConfig config = convert((Map<String, String>) object);
+            DestinationConfig config = convert(object);
             logger.debug("Loaded config: {}", config.getName());
             configs.add(config);
         }
         return configs;
     }
     
-    private DestinationConfig convert(Map<String, String> configMap) {
+    @SuppressWarnings("unchecked")
+    private DestinationConfig convert(Object configObject) {
+        if(!(configObject instanceof Map)) {
+            throw new IllegalArgumentException("Error parsing the configuration object. It is not a java.util.Map");
+        }
+        Map<String, String> configMap = (Map<String, String>) configObject;
         DestinationConfig config = new DestinationConfig();
         config.setName(configMap.get("name"));
         config.setEndpoint(configMap.get("endpoint"));

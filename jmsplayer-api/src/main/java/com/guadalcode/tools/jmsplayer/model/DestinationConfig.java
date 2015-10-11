@@ -1,5 +1,9 @@
 package com.guadalcode.tools.jmsplayer.model;
 
+/**
+ * @author rromero
+ *
+ */
 public class DestinationConfig {
 
     private String name;
