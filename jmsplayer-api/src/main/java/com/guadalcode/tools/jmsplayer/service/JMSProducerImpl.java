@@ -13,6 +13,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
@@ -30,8 +31,12 @@ public class JMSProducerImpl implements JMSProducer {
         Hashtable<String, String> properties = new Hashtable<>();
         properties.put(Context.INITIAL_CONTEXT_FACTORY, destinationCfg.getProviderType().getInitialContextFactory());
         properties.put(Context.PROVIDER_URL, destinationCfg.getEndpoint());
-        properties.put(Context.SECURITY_PRINCIPAL, destinationCfg.getUsername());
-        properties.put(Context.SECURITY_CREDENTIALS, destinationCfg.getPassword());
+        if(StringUtils.isNotBlank(destinationCfg.getUsername())) {
+            properties.put(Context.SECURITY_PRINCIPAL, destinationCfg.getUsername());
+        }
+        if(StringUtils.isNotBlank(destinationCfg.getPassword())) {
+            properties.put(Context.SECURITY_CREDENTIALS, destinationCfg.getPassword());
+        }
         try {
             ctx = new InitialContext(properties);
             logger.debug("Created initial context for destination: {}", destinationCfg.getName());

@@ -18,9 +18,9 @@ public class JMSService {
 
     private Map<String, DestinationConfig> destinations = Collections.synchronizedMap(new HashMap<String, DestinationConfig>());
 
-    private Map<JMSProviderType, JMSProducer> producers = Collections.synchronizedMap(new HashMap<JMSProviderType, JMSProducer>());
-
     private static JMSService INSTANCE = new JMSService();
+    
+    private JMSProducer producer = new JMSProducerImpl();
 
     private JMSService() {
     }
@@ -53,12 +53,7 @@ public class JMSService {
         if (destination == null) {
             throw new IllegalArgumentException("The requested destination does not exist");
         }
-        JMSProducer sender = producers.get(destination.getProviderType());
-        if (sender == null) {
-            throw new UnsupportedOperationException("Unable to find a JMS Sender of type: "
-                    + destination.getProviderType());
-        }
-        sender.send(destination, message);
+        producer.send(destination, message);
     }
 
     public DestinationConfig getDestination(String name) {

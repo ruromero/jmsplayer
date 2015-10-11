@@ -18,6 +18,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,8 +48,14 @@ public class JMSConsumerImpl implements JMSConsumer {
             public synchronized void run() {
                 InitialContext ctx = null;
                 Hashtable<String, String> properties = new Hashtable<>();
-                properties.put(Context.INITIAL_CONTEXT_FACTORY, JMSProviderType.EMBEDDED_ACTIVEMQ.getInitialContextFactory());
+                properties.put(Context.INITIAL_CONTEXT_FACTORY, config.getProviderType().getInitialContextFactory());
                 properties.put(Context.PROVIDER_URL, config.getEndpoint());
+                if(StringUtils.isNotBlank(config.getUsername())) {
+                    properties.put(Context.SECURITY_PRINCIPAL, config.getUsername());
+                }
+                if(StringUtils.isNotBlank(config.getPassword())) {
+                    properties.put(Context.SECURITY_CREDENTIALS, config.getPassword());
+                }
                 try {
                     ctx = new InitialContext(properties);
                     logger.debug("Created initial context for destination: {}", config.getName());
