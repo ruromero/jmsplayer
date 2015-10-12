@@ -31,7 +31,7 @@ public class ConfigurationServlet implements ServletContextListener {
         String path = event.getServletContext().getInitParameter(CONFIGURATION_PATH_PARAM);
         if (!Strings.isNullOrEmpty(path)) {
             logger.debug("Trying to configure destinations from: {}", path);
-            InputStream inputStream = ClassLoader.getSystemResourceAsStream(path);
+            InputStream inputStream = this.getClass().getResourceAsStream(path);
             if (inputStream != null) {
                 logger.debug("Loaded file {} from classpath", path);
                 configSrv.addAll(configReader.load(inputStream));
