@@ -1,4 +1,4 @@
-package com.guadalcode.tools.jmsplayer.service.reader;
+package com.guadalcode.tools.jmsplayer.service.configuration;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -23,7 +23,7 @@ public class YamlConfigurationReaderTest {
     @Test
     public void testReadSimple() {
         ConfigurationReader reader = new YamlConfigurationReader();
-        List<DestinationConfig> configs = reader.load("configuration/simple.yaml");
+        List<DestinationConfig> configs = reader.loadFrom("configuration/simple.yaml");
         
         assertThat(configs, notNullValue());
         assertThat(configs.size(), equalTo(1));
@@ -41,7 +41,7 @@ public class YamlConfigurationReaderTest {
     @Test
     public void testReadMultiple() {
         ConfigurationReader reader = new YamlConfigurationReader();
-        List<DestinationConfig> configs = reader.load("configuration/multiple.yaml");
+        List<DestinationConfig> configs = reader.loadFrom("configuration/multiple.yaml");
         
         assertThat(configs, notNullValue());
         assertThat(configs.size(), equalTo(2));

@@ -29,7 +29,8 @@ public class YamlConfigurationReader implements ConfigurationReader {
     
     @Override
     public List<DestinationConfig> load(String content) {
-        List<?> objects = (List<?>) new Yaml().load(content);
+        Yaml yaml = new Yaml();
+        List<?> objects = (List<?>) yaml.load(content);
         return load(objects);
     }
     
