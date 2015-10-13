@@ -10,14 +10,20 @@ import org.junit.Test;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
+import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationService;
 import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumer;
-import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerFactory;
+import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerImpl;
 import com.guadalcode.tools.jmsplayer.util.server.ActiveMQServer;
 
+/**
+ * @author rromero
+ *
+ */
 public class EmbeddedActiveMQJMSProducerIntegration {
 
     private static DestinationConfig config;
     private static JMSService service = JMSService.getInstance();
+    private static ConfigurationService configSrv = ConfigurationService.getInstance();
     private static JMSConsumer consumer;
     private static ActiveMQServer server = new ActiveMQServer();
 
@@ -32,9 +38,9 @@ public class EmbeddedActiveMQJMSProducerIntegration {
         config.setProviderType(JMSProviderType.EMBEDDED_ACTIVEMQ);
         config.setDestinationName("dynamicQueues/FOO.BAR");
 
-        service.addDestination(config);
+        configSrv.add(config);
 
-        consumer = JMSConsumerFactory.build(config);
+        consumer = new JMSConsumerImpl(config);
         consumer.start();
 
     }

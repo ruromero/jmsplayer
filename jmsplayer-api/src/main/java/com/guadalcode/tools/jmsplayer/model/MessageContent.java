@@ -1,5 +1,9 @@
 package com.guadalcode.tools.jmsplayer.model;
 
+/**
+ * @author rromero
+ *
+ */
 public class MessageContent {
 
     private final String type;

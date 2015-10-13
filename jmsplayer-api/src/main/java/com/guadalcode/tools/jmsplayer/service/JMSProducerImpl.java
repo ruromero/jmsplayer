@@ -1,4 +1,4 @@
-package com.guadalcode.tools.jmsplayer.service.impl;
+package com.guadalcode.tools.jmsplayer.service;
 
 import java.util.Hashtable;
 
@@ -15,25 +15,31 @@ import javax.naming.NamingException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.util.Strings;
 
+import com.google.common.base.Strings;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
-import com.guadalcode.tools.jmsplayer.service.JMSProducer;
 
-public class WeblogicJMSProducer implements JMSProducer {
+/**
+ * @author rromero
+ *
+ */
+public class JMSProducerImpl implements JMSProducer {
 
-    public static final String WL_INITIAL_CONTEXT_FACTORY = "weblogic.jndi.WLInitialContextFactory";
-    private static final Logger logger = LogManager.getLogger(WeblogicJMSProducer.class);
+    private static final Logger logger = LogManager.getLogger(JMSProducerImpl.class);
 
     @Override
     public void send(DestinationConfig destinationCfg, MessageContent message) {
         InitialContext ctx = null;
         Hashtable<String, String> properties = new Hashtable<>();
-        properties.put(Context.INITIAL_CONTEXT_FACTORY, WL_INITIAL_CONTEXT_FACTORY);
+        properties.put(Context.INITIAL_CONTEXT_FACTORY, destinationCfg.getProviderType().getInitialContextFactory());
         properties.put(Context.PROVIDER_URL, destinationCfg.getEndpoint());
-        properties.put(Context.SECURITY_PRINCIPAL, destinationCfg.getUsername());
-        properties.put(Context.SECURITY_CREDENTIALS, destinationCfg.getPassword());
+        if(Strings.isNullOrEmpty(destinationCfg.getUsername())) {
+            properties.put(Context.SECURITY_PRINCIPAL, destinationCfg.getUsername());
+        }
+        if(Strings.isNullOrEmpty(destinationCfg.getPassword())) {
+            properties.put(Context.SECURITY_CREDENTIALS, destinationCfg.getPassword());
+        }
         try {
             ctx = new InitialContext(properties);
             logger.debug("Created initial context for destination: {}", destinationCfg.getName());
@@ -51,7 +57,7 @@ public class WeblogicJMSProducer implements JMSProducer {
                 Destination destination = (Destination) ctx.lookup(destinationCfg.getDestinationName());
                 producer = session.createProducer(destination);
                 TextMessage msg = session.createTextMessage(message.getText());
-                if (!Strings.isBlank(message.getType())) {
+                if (Strings.isNullOrEmpty(message.getType())) {
                     msg.setJMSType(message.getType());
                 }
                 logger.debug("Message configured and ready to be sent");

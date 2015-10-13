@@ -17,21 +17,24 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
-import com.guadalcode.tools.jmsplayer.service.JMSService;
+import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationService;
 
+/**
+ * @author rromero
+ *
+ */
 @Path("configuration")
 public class ConfigurationResource {
 
     private static final Logger logger = LogManager.getLogger(ConfigurationResource.class);
 
-    // TODO Use IoC, this is only for testing
-    private static final JMSService JMS_SERVICE = JMSService.getInstance();
+    private static final ConfigurationService CONFIG_SRV = ConfigurationService.getInstance();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<DestinationConfig> list() {
         logger.debug("Requested all configurations");
-        return JMS_SERVICE.getDestinations();
+        return CONFIG_SRV.getAll();
     }
 
     @GET
@@ -39,7 +42,7 @@ public class ConfigurationResource {
     @Produces(MediaType.APPLICATION_JSON)
     public DestinationConfig get(@PathParam("name") String name) {
         logger.debug("Requested config {}", name);
-        DestinationConfig config = JMS_SERVICE.getDestination(name);
+        DestinationConfig config = CONFIG_SRV.get(name);
         if (config != null) {
             logger.debug("Found config with name {}", name);
             return config;
@@ -53,7 +56,7 @@ public class ConfigurationResource {
     @Path("/{name}")
     public void delete(@PathParam("name") String name) {
         logger.debug("Removing destination {}", name);
-        JMS_SERVICE.removeDestination(name);
+        CONFIG_SRV.remove(name);
     }
 
     @POST
@@ -61,13 +64,13 @@ public class ConfigurationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void update(@PathParam("name") String name, DestinationConfig config) {
         logger.debug("Updating destination {}", name);
-        JMS_SERVICE.updateDestination(name, config);
+        CONFIG_SRV.update(name, config);
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void create(DestinationConfig config) {
         logger.debug("Creating destination {}", config.getName());
-        JMS_SERVICE.addDestination(config);
+        CONFIG_SRV.add(config);
     }
 }

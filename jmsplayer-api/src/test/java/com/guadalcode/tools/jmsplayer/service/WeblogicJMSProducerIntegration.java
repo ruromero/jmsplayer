@@ -10,13 +10,19 @@ import org.junit.Test;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
+import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationService;
 import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumer;
-import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerFactory;
+import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerImpl;
 
+/**
+ * @author rromero
+ *
+ */
 public class WeblogicJMSProducerIntegration {
 
     private static JMSService service = JMSService.getInstance();
     private static DestinationConfig config;
+    private static ConfigurationService configSrv = ConfigurationService.getInstance();
     private static JMSConsumer consumer;
 
     @BeforeClass
@@ -30,9 +36,9 @@ public class WeblogicJMSProducerIntegration {
         config.setConnectionFactory("jms/defaultConnectionFactory");
         config.setDestinationName("jms/myqueue");
 
-        service.addDestination(config);
+        configSrv.add(config);
 
-        consumer = JMSConsumerFactory.build(config);
+        consumer = new JMSConsumerImpl(config);
         consumer.start();
 
     }

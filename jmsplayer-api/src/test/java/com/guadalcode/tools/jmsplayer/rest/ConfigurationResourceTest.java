@@ -22,6 +22,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
 
+/**
+ * @author rromero
+ *
+ */
 public class ConfigurationResourceTest extends JerseyTest {
 
     private static final GenericType<List<DestinationConfig>> GENERIC_TYPE = new GenericType<List<DestinationConfig>>() {
