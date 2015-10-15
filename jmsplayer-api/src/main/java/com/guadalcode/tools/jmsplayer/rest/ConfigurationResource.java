@@ -2,6 +2,7 @@ package com.guadalcode.tools.jmsplayer.rest;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -28,13 +29,14 @@ public class ConfigurationResource {
 
     private static final Logger logger = LogManager.getLogger(ConfigurationResource.class);
 
-    private static final ConfigurationService CONFIG_SRV = ConfigurationService.getInstance();
+    @Inject
+    private ConfigurationService configService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<DestinationConfig> list() {
         logger.debug("Requested all configurations");
-        return CONFIG_SRV.getAll();
+        return configService.getAll();
     }
 
     @GET
@@ -42,7 +44,7 @@ public class ConfigurationResource {
     @Produces(MediaType.APPLICATION_JSON)
     public DestinationConfig get(@PathParam("name") String name) {
         logger.debug("Requested config {}", name);
-        DestinationConfig config = CONFIG_SRV.get(name);
+        DestinationConfig config = configService.get(name);
         if (config != null) {
             logger.debug("Found config with name {}", name);
             return config;
@@ -56,7 +58,7 @@ public class ConfigurationResource {
     @Path("/{name}")
     public void delete(@PathParam("name") String name) {
         logger.debug("Removing destination {}", name);
-        CONFIG_SRV.remove(name);
+        configService.remove(name);
     }
 
     @POST
@@ -64,13 +66,13 @@ public class ConfigurationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void update(@PathParam("name") String name, DestinationConfig config) {
         logger.debug("Updating destination {}", name);
-        CONFIG_SRV.update(name, config);
+        configService.update(name, config);
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void create(DestinationConfig config) {
         logger.debug("Creating destination {}", config.getName());
-        CONFIG_SRV.add(config);
+        configService.add(config);
     }
 }

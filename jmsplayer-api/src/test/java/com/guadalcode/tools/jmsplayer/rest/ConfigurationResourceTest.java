@@ -28,7 +28,7 @@ import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
  */
 public class ConfigurationResourceTest extends JerseyTest {
 
-    private static final GenericType<List<DestinationConfig>> GENERIC_TYPE = new GenericType<List<DestinationConfig>>() {
+    private static final GenericType<List<DestinationConfig>> DEST_CONFIG_LIST_TYPE = new GenericType<List<DestinationConfig>>() {
     };
 
     @Override
@@ -40,7 +40,7 @@ public class ConfigurationResourceTest extends JerseyTest {
 
     @Test
     public void testList() {
-        List<DestinationConfig> configs = target("configuration").request(MediaType.APPLICATION_JSON).get(GENERIC_TYPE);
+        List<DestinationConfig> configs = target("configuration").request(MediaType.APPLICATION_JSON).get(DEST_CONFIG_LIST_TYPE);
         assertTrue(configs.isEmpty());
     }
 
@@ -58,7 +58,7 @@ public class ConfigurationResourceTest extends JerseyTest {
 
         target("configuration").request().put(configEntity, DestinationConfig.class);
 
-        List<DestinationConfig> configs = target("configuration").request(MediaType.APPLICATION_JSON).get(GENERIC_TYPE);
+        List<DestinationConfig> configs = target("configuration").request(MediaType.APPLICATION_JSON).get(DEST_CONFIG_LIST_TYPE);
         assertFalse(configs.isEmpty());
         assertEquals(1, configs.size());
         DestinationConfig resultConfig = configs.get(0);

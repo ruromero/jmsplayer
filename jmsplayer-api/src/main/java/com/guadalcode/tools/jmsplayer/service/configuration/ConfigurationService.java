@@ -18,18 +18,10 @@ import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
  */
 public class ConfigurationService {
 
-    private static final ConfigurationService INSTANCE = new ConfigurationService();
     private static final Logger logger = LogManager.getLogger(ConfigurationService.class);
 
     private Map<String, DestinationConfig> destinations = Collections
             .synchronizedMap(new HashMap<String, DestinationConfig>());
-
-    private ConfigurationService() {
-    }
-
-    public static ConfigurationService getInstance() {
-        return INSTANCE;
-    }
 
     public Collection<DestinationConfig> getAll() {
         return destinations.values();

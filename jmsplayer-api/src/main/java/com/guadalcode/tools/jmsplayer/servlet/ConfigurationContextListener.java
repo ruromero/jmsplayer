@@ -2,6 +2,7 @@ package com.guadalcode.tools.jmsplayer.servlet;
 
 import java.io.InputStream;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -12,15 +13,17 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.base.Strings;
 import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationReader;
 import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationService;
-import com.guadalcode.tools.jmsplayer.service.configuration.impl.YamlConfigurationReader;
 
 @WebListener
-public class ConfigurationServlet implements ServletContextListener {
+public class ConfigurationContextListener implements ServletContextListener {
 
-    private static final Logger logger = LogManager.getLogger(ConfigurationServlet.class);
+    private static final Logger logger = LogManager.getLogger(ConfigurationContextListener.class);
     private static final String CONFIGURATION_PATH_PARAM = "jmsplayer.configuration.path";
-    private static final ConfigurationService configSrv = ConfigurationService.getInstance();
-    private static final ConfigurationReader configReader = new YamlConfigurationReader();
+    
+    @Inject
+    private ConfigurationService configSrv;
+    @Inject
+    private ConfigurationReader configReader;
 
     @Override
     public void contextDestroyed(ServletContextEvent arg0) {

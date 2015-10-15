@@ -1,5 +1,8 @@
 package com.guadalcode.tools.jmsplayer.service;
 
+import javax.annotation.Resource;
+import javax.inject.Inject;
+
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.model.MessageContent;
 import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationService;
@@ -8,21 +11,14 @@ import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationService
  * @author rromero
  *
  */
+@Resource(name="JMSService", type=JMSService.class)
 public class JMSService {
 
-    //eager loading
-    private static JMSService INSTANCE = new JMSService();
+    @Inject
+    private ConfigurationService configurationService;
     
-    private ConfigurationService configurationService = ConfigurationService.getInstance();
-    
-    private JMSProducer producer = new JMSProducerImpl();
-
-    private JMSService() {
-    }
-    
-    public static JMSService getInstance() {
-        return INSTANCE;
-    }
+    @Inject
+    private JMSProducer producer;
 
     public void sendMessage(String destinationName, MessageContent message) {
         DestinationConfig destination = configurationService.get(destinationName);

@@ -26,7 +26,16 @@
 		</wls:prefer-application-packages>
 
 		<wls:prefer-application-resources>
-			<wls:resource-name>org.slf4j.impl.StaticLoggerBinder</wls:resource-name>
+			<wls:resource-name>META-INF/services/javax.servlet.ServletContainerInitializer</wls:resource-name>
+			<wls:resource-name>META-INF/services/javax.ws.rs.ext.RuntimeDelegate</wls:resource-name>
+
+			<!-- jersey -->
+			<wls:resource-name>META-INF/services/org.glassfish.jersey.*</wls:resource-name>
+			<wls:resource-name>org.glassfish.jersey.*</wls:resource-name>
+			<wls:resource-name>jersey.repackaged.*</wls:resource-name>
+
+			<!-- hk2 -->
+			<wls:resource-name>META-INF/services/org.glassfish.hk2.*</wls:resource-name>
 		</wls:prefer-application-resources>
 	</wls:container-descriptor>
 
