@@ -1,10 +1,15 @@
 package com.guadalcode.tools.jmsplayer.service.configuration;
 
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.servlet.ServletContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,10 +24,35 @@ import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 public class ConfigurationService {
 
     private static final Logger logger = LogManager.getLogger(ConfigurationService.class);
+    private static final String CONFIGURATION_PATH_PARAM = "jmsplayer.configuration.path";
 
     private Map<String, DestinationConfig> destinations = Collections
             .synchronizedMap(new HashMap<String, DestinationConfig>());
-
+    
+    @Inject
+    private ServletContext servletContext;
+    @Inject
+    private ConfigurationReader configReader;
+    
+    @PostConstruct
+    public void loadConfig() {
+        String path = servletContext.getInitParameter(CONFIGURATION_PATH_PARAM);
+        if (!Strings.isNullOrEmpty(path)) {
+            logger.debug("Trying to configure destinations from: {}", path);
+            InputStream inputStream = servletContext.getResourceAsStream(path);
+            if (inputStream != null) {
+                logger.debug("Loaded file {} from classpath", path);
+                List<DestinationConfig> configurations = configReader.load(inputStream);
+                addAll(configurations);
+                logger.debug("Successfully imported configurations from file {}", path);
+            } else {
+                logger.warn("Unable to load file {}", path);
+            }
+        } else {
+            logger.debug("No configuration file has been configured");
+        };
+    }
+    
     public Collection<DestinationConfig> getAll() {
         return destinations.values();
     }

@@ -1,6 +1,5 @@
 package com.guadalcode.tools.jmsplayer.service;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
@@ -11,7 +10,6 @@ import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationService
  * @author rromero
  *
  */
-@Resource(name="JMSService", type=JMSService.class)
 public class JMSService {
 
     @Inject
