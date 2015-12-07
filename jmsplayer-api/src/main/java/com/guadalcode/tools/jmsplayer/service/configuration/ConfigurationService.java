@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
@@ -16,20 +17,13 @@ import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
  * @author rromero
  *
  */
+@Service
 public class ConfigurationService {
 
-    private static final ConfigurationService INSTANCE = new ConfigurationService();
     private static final Logger logger = LogManager.getLogger(ConfigurationService.class);
 
     private Map<String, DestinationConfig> destinations = Collections
             .synchronizedMap(new HashMap<String, DestinationConfig>());
-
-    private ConfigurationService() {
-    }
-
-    public static ConfigurationService getInstance() {
-        return INSTANCE;
-    }
 
     public Collection<DestinationConfig> getAll() {
         return destinations.values();

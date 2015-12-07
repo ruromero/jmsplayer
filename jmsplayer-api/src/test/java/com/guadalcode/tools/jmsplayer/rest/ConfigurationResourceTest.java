@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -26,6 +27,7 @@ import com.guadalcode.tools.jmsplayer.model.JMSProviderType;
  * @author rromero
  *
  */
+@Ignore
 public class ConfigurationResourceTest extends JerseyTest {
 
     private static final GenericType<List<DestinationConfig>> GENERIC_TYPE = new GenericType<List<DestinationConfig>>() {

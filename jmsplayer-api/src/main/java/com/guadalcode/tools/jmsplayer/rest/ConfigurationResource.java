@@ -15,6 +15,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
 import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationService;
@@ -24,17 +26,19 @@ import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationService
  *
  */
 @Path("configuration")
+@Component
 public class ConfigurationResource {
 
     private static final Logger logger = LogManager.getLogger(ConfigurationResource.class);
 
-    private static final ConfigurationService CONFIG_SRV = ConfigurationService.getInstance();
+    @Autowired
+    private ConfigurationService configurationService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Collection<DestinationConfig> list() {
         logger.debug("Requested all configurations");
-        return CONFIG_SRV.getAll();
+        return configurationService.getAll();
     }
 
     @GET
@@ -42,7 +46,7 @@ public class ConfigurationResource {
     @Produces(MediaType.APPLICATION_JSON)
     public DestinationConfig get(@PathParam("name") String name) {
         logger.debug("Requested config {}", name);
-        DestinationConfig config = CONFIG_SRV.get(name);
+        DestinationConfig config = configurationService.get(name);
         if (config != null) {
             logger.debug("Found config with name {}", name);
             return config;
@@ -56,7 +60,7 @@ public class ConfigurationResource {
     @Path("/{name}")
     public void delete(@PathParam("name") String name) {
         logger.debug("Removing destination {}", name);
-        CONFIG_SRV.remove(name);
+        configurationService.remove(name);
     }
 
     @POST
@@ -64,13 +68,13 @@ public class ConfigurationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void update(@PathParam("name") String name, DestinationConfig config) {
         logger.debug("Updating destination {}", name);
-        CONFIG_SRV.update(name, config);
+        configurationService.update(name, config);
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void create(DestinationConfig config) {
         logger.debug("Creating destination {}", config.getName());
-        CONFIG_SRV.add(config);
+        configurationService.add(config);
     }
 }

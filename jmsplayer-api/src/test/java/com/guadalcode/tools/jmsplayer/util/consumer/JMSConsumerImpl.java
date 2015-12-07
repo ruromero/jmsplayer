@@ -34,7 +34,7 @@ public class JMSConsumerImpl implements JMSConsumer {
     private static final Logger logger = LogManager.getLogger(JMSConsumerImpl.class);
     private static final long MAX_WAIT = 1000L;
 
-    private List<MessageContent> messages = new ArrayList<>();
+    private List<MessageContent> messages = new ArrayList<MessageContent>();
 
     private DestinationConfig config;
 
@@ -50,7 +50,7 @@ public class JMSConsumerImpl implements JMSConsumer {
             @Override
             public synchronized void run() {
                 InitialContext ctx = null;
-                Hashtable<String, String> properties = new Hashtable<>();
+                Hashtable<String, String> properties = new Hashtable<String, String>();
                 properties.put(Context.INITIAL_CONTEXT_FACTORY, config.getProviderType().getInitialContextFactory());
                 properties.put(Context.PROVIDER_URL, config.getEndpoint());
                 if(StringUtils.isNotBlank(config.getUsername())) {
@@ -98,7 +98,10 @@ public class JMSConsumerImpl implements JMSConsumer {
 
                         }
 
-                    } catch (NamingException | JMSException e) {
+                    } catch (JMSException e) {
+                        logger.error("Unable to create the JMS Connection to " + config.getConnectionFactory() + " - "
+                                + config.getDestinationName(), e);
+                    } catch (NamingException e) {
                         logger.error("Unable to create the JMS Connection to " + config.getConnectionFactory() + " - "
                                 + config.getDestinationName(), e);
                     } finally {

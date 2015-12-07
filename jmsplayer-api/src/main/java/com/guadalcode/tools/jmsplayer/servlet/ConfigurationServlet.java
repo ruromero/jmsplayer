@@ -8,19 +8,25 @@ import javax.servlet.annotation.WebListener;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.google.common.base.Strings;
 import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationReader;
 import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationService;
-import com.guadalcode.tools.jmsplayer.service.configuration.impl.YamlConfigurationReader;
 
 @WebListener
+@Component
 public class ConfigurationServlet implements ServletContextListener {
 
     private static final Logger logger = LogManager.getLogger(ConfigurationServlet.class);
     private static final String CONFIGURATION_PATH_PARAM = "jmsplayer.configuration.path";
-    private static final ConfigurationService configSrv = ConfigurationService.getInstance();
-    private static final ConfigurationReader configReader = new YamlConfigurationReader();
+    
+    @Autowired
+    private ConfigurationService configSrv;
+    
+    @Autowired
+    private ConfigurationReader configReader;
 
     @Override
     public void contextDestroyed(ServletContextEvent arg0) {

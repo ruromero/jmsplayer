@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
@@ -17,6 +18,7 @@ import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationReader;
  * @author rromero
  *
  */
+@Service
 public class YamlConfigurationReader implements ConfigurationReader {
 
     private static final Logger logger = LogManager.getLogger(YamlConfigurationReader.class);
@@ -41,7 +43,7 @@ public class YamlConfigurationReader implements ConfigurationReader {
     }
     
     private List<DestinationConfig> load(List<?> objects) {
-        List<DestinationConfig> configs = new ArrayList<>();
+        List<DestinationConfig> configs = new ArrayList<DestinationConfig>();
         for(Object object : objects) {
             DestinationConfig config = convert(object);
             logger.debug("Loaded config: {}", config.getName());
