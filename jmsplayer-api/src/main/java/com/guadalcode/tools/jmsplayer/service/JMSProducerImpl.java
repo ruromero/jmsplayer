@@ -63,13 +63,18 @@ public class JMSProducerImpl implements JMSProducer {
                 if (!Strings.isNullOrEmpty(message.getType())) {
                     msg.setJMSType(message.getType());
                 }
-                logger.debug("Message configured and ready to be sent");
+                logger.debug("Message configured and ready to be sent. ID {}", message.getId());
                 producer.send(msg);
+<<<<<<< HEAD
                 logger.debug("Message successfully sent");
             } catch (NamingException e) {
                 logger.error("Unable to create the JMS Connection to " + destinationCfg.getConnectionFactory() + " - "
                         + destinationCfg.getDestinationName(), e);
             } catch (JMSException e) {
+=======
+                logger.debug("Message successfully sent with ID: {}", message.getId());
+            } catch (NamingException | JMSException e) {
+>>>>>>> b8a7aa6d8441f107d9f71abdd264861108195bd7
                 logger.error("Unable to create the JMS Connection to " + destinationCfg.getConnectionFactory() + " - "
                         + destinationCfg.getDestinationName(), e);
             } finally {

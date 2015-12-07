@@ -21,11 +21,17 @@ import com.guadalcode.tools.jmsplayer.util.server.ActiveMQServer;
  */
 public class EmbeddedActiveMQJMSProducerIntegration {
 
-    private static DestinationConfig config;
     private static JMSService service = new JMSService();
     private static ConfigurationService configSrv = new ConfigurationService();
-    private static JMSConsumer consumer;
     private static ActiveMQServer server = new ActiveMQServer();
+
+    private static DestinationConfig config;
+<<<<<<< HEAD
+    private static JMSService service = new JMSService();
+    private static ConfigurationService configSrv = new ConfigurationService();
+=======
+>>>>>>> b8a7aa6d8441f107d9f71abdd264861108195bd7
+    private static JMSConsumer consumer;
 
     @BeforeClass
     public static void setUp() throws Exception {
