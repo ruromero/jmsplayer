@@ -21,13 +21,8 @@ import com.guadalcode.tools.jmsplayer.util.consumer.JMSConsumerImpl;
 public class WeblogicJMSProducerIntegration {
 
     private static JMSService service = new JMSService();
-<<<<<<< HEAD
     private static DestinationConfig config;
     private static ConfigurationService configSrv = new ConfigurationService();
-=======
-    private static ConfigurationService configSrv = new ConfigurationService();
-    private static DestinationConfig config;
->>>>>>> b8a7aa6d8441f107d9f71abdd264861108195bd7
     private static JMSConsumer consumer;
 
     @BeforeClass

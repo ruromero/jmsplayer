@@ -23,9 +23,6 @@
 			<wls:package-name>org.hibernate.validator</wls:package-name>
 		</wls:prefer-application-packages>
 
-<<<<<<< HEAD
-		<wls:allow-all-roles>true</wls:allow-all-roles>
-=======
 		<wls:prefer-application-resources>
 			<wls:resource-name>META-INF/services/javax.servlet.ServletContainerInitializer</wls:resource-name>
 			<wls:resource-name>META-INF/services/javax.ws.rs.ext.RuntimeDelegate</wls:resource-name>
@@ -38,7 +35,7 @@
 			<!-- hk2 -->
 			<wls:resource-name>META-INF/services/org.glassfish.hk2.*</wls:resource-name>
 		</wls:prefer-application-resources>
->>>>>>> b8a7aa6d8441f107d9f71abdd264861108195bd7
+		<wls:allow-all-roles>true</wls:allow-all-roles>
 	</wls:container-descriptor>
 
 </wls:weblogic-web-app>
