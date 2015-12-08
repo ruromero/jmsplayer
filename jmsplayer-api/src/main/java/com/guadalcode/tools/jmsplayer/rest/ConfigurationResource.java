@@ -1,7 +1,10 @@
 package com.guadalcode.tools.jmsplayer.rest;
 
+import java.io.InputStream;
 import java.util.Collection;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,9 +19,12 @@ import javax.ws.rs.core.MediaType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.google.common.base.Strings;
 import com.guadalcode.tools.jmsplayer.model.DestinationConfig;
+import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationReader;
 import com.guadalcode.tools.jmsplayer.service.configuration.ConfigurationService;
 
 /**
@@ -32,7 +38,33 @@ public class ConfigurationResource {
     private static final Logger logger = LogManager.getLogger(ConfigurationResource.class);
 
     @Autowired
+    private ServletContext servletContext;
+    
+    @Autowired
     private ConfigurationService configurationService;
+    
+    @Value("#{appProperties['destinations.configuration']}")
+    private String path;
+    
+    @Autowired
+    private ConfigurationReader configReader;
+    
+    @PostConstruct
+    public void configure() {
+        if (!Strings.isNullOrEmpty(path)) {
+            logger.debug("Trying to configure destinations from: {}", path);
+            InputStream inputStream = servletContext.getResourceAsStream(path);
+            if (inputStream != null) {
+                logger.debug("Loaded file {} from classpath", path);
+                configurationService.addAll(configReader.load(inputStream));
+                logger.debug("Successfully imported configurations from file {}", path);
+            } else {
+                logger.warn("Unable to load file {}", path);
+            }
+        } else {
+            logger.debug("No configuration file has been configured");
+        }
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

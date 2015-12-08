@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
@@ -12,4 +11,13 @@
 	<context:component-scan base-package="com.guadalcode.tools.jmsplayer.rest" />
 	<context:component-scan base-package="com.guadalcode.tools.jmsplayer.service" />
 
+	<bean id="appProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="singleton" value="true" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="properties">
+			<props>
+				<prop key="destinations.configuration">destinations-default.yaml</prop>
+			</props>
+		</property>
+	</bean>
 </beans>

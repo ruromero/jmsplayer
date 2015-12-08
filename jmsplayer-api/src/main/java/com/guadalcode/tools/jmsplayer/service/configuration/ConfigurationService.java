@@ -22,13 +22,12 @@ public class ConfigurationService {
 
     private static final Logger logger = LogManager.getLogger(ConfigurationService.class);
 
-    private Map<String, DestinationConfig> destinations = Collections
-            .synchronizedMap(new HashMap<String, DestinationConfig>());
-
+    private Map<String, DestinationConfig> destinations = Collections.synchronizedMap(new HashMap<String, DestinationConfig>());
+    
     public Collection<DestinationConfig> getAll() {
         return destinations.values();
     }
-
+    
     public DestinationConfig add(DestinationConfig destination) {
         if (destination == null) {
             throw new IllegalArgumentException("Destination must not be null");
