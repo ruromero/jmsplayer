@@ -1,0 +1,7 @@
+- name: TestConfig
+  endpoint: t3://localhost:7001
+  connectionFactory: jms/defaultConnectionFactory
+  destinationName: jms/myqueue
+  username: weblogic
+  password: weblogic1
+  providerType: WEBLOGIC
